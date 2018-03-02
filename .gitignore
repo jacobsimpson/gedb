@@ -1,3 +1,8 @@
 /build/
 .sw?
 .*.sw?
+/vendor/
+.local
+.java-version
+*.gedb
+/gedbcmd
