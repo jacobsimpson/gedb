@@ -4,7 +4,10 @@
 # warnings. False alarms make it valueless.
 build::
 	goimports -w `find . -name "*.go"`
-	go test github.com/jacobsimpson/gedb
+	go test \
+		github.com/jacobsimpson/gedb \
+		github.com/jacobsimpson/gedb/parser \
+		github.com/jacobsimpson/gedb/rows
 	go vet
 	go build -o gedbcmd ./cmd/gedbcmd
 
