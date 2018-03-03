@@ -1,7 +1,7 @@
 package gedb
 
 import (
-	"database/sql/driver"
+	sqldriver "database/sql/driver"
 	"fmt"
 
 	"github.com/jacobsimpson/gedb/parser"
@@ -10,7 +10,7 @@ import (
 type gedbConn struct{}
 
 // Prepare returns a prepared statement, bound to this connection.
-func (conn *gedbConn) Prepare(query string) (driver.Stmt, error) {
+func (conn *gedbConn) Prepare(query string) (sqldriver.Stmt, error) {
 	ast, err := parser.Parse(query)
 	if err != nil {
 		return nil, err
@@ -33,6 +33,6 @@ func (conn *gedbConn) Close() error {
 // Begin starts and returns a new transaction.
 //
 // Deprecated: Drivers should implement ConnBeginTx instead (or additionally).
-func (conn *gedbConn) Begin() (driver.Tx, error) {
+func (conn *gedbConn) Begin() (sqldriver.Tx, error) {
 	return nil, fmt.Errorf("conn.Begin() unimplemented")
 }

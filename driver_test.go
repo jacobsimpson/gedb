@@ -2,14 +2,14 @@ package gedb
 
 import (
 	"database/sql"
-	"database/sql/driver"
+	sqldriver "database/sql/driver"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestImplementsDriver(t *testing.T) {
-	var _ driver.Driver = &gedb{}
+	var _ sqldriver.Driver = &gedbDriver{}
 }
 
 func TestOpenDatabase(t *testing.T) {

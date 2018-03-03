@@ -2,7 +2,7 @@ package gedb
 
 import (
 	"database/sql"
-	"database/sql/driver"
+	sqldriver "database/sql/driver"
 	"fmt"
 	"io"
 	"log"
@@ -11,14 +11,11 @@ import (
 	"strings"
 )
 
-// 	"database/sql/driver"
-
 func init() {
-	sql.Register("gedb", &gedb{})
+	sql.Register("gedb", &gedbDriver{})
 }
 
-// gedb implement database.sql.driver.Driver.
-type gedb struct{}
+type gedbDriver struct{}
 
 type header struct {
 	Name         string
@@ -36,7 +33,7 @@ var currentHeader = header{
 	Length:       13,
 }
 
-func (db *gedb) Open(name string) (driver.Conn, error) {
+func (db *gedbDriver) Open(name string) (sqldriver.Conn, error) {
 	file, err := os.OpenFile(name, os.O_RDWR|os.O_CREATE, 0755)
 	if err != nil {
 		log.Fatal(err)
@@ -57,7 +54,7 @@ func (db *gedb) Open(name string) (driver.Conn, error) {
 	return &gedbConn{}, nil
 }
 
-func (db *gedb) readHeader(reader io.Reader) (*header, error) {
+func (db *gedbDriver) readHeader(reader io.Reader) (*header, error) {
 	headerBytes := []byte{}
 	data := make([]byte, 1)
 	for {
@@ -107,7 +104,7 @@ func (db *gedb) readHeader(reader io.Reader) (*header, error) {
 	return &result, nil
 }
 
-func (db *gedb) writeHeader(writer io.Writer) error {
+func (db *gedbDriver) writeHeader(writer io.Writer) error {
 	headerLine := fmt.Sprintf("%s - %d.%d.%d\n",
 		currentHeader.Name,
 		currentHeader.MajorVersion,

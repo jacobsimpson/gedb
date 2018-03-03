@@ -1,7 +1,7 @@
 package gedb
 
 import (
-	"database/sql/driver"
+	sqldriver "database/sql/driver"
 	"strings"
 	"testing"
 
@@ -9,13 +9,13 @@ import (
 )
 
 func TestImplementsInterface(*testing.T) {
-	var _ driver.Driver = &gedb{}
+	var _ sqldriver.Driver = &gedbDriver{}
 	// Just compiling is enough to pass this test.
 }
 
 func TestReadHeader(t *testing.T) {
 	assert := assert.New(t)
-	db := &gedb{}
+	db := &gedbDriver{}
 	header, err := db.readHeader(strings.NewReader("AAAA - 0.1.2\nthis is some more"))
 	assert.NoError(err)
 	assert.Equal(header.Name, "AAAA")
