@@ -2,7 +2,7 @@ package gedb
 
 import (
 	"database/sql"
-	sqldriver "database/sql/driver"
+	"database/sql/driver"
 	"fmt"
 	"io"
 	"log"
@@ -33,7 +33,7 @@ var currentHeader = header{
 	Length:       13,
 }
 
-func (db *gedbDriver) Open(name string) (sqldriver.Conn, error) {
+func (db *gedbDriver) Open(name string) (driver.Conn, error) {
 	file, err := os.OpenFile(name, os.O_RDWR|os.O_CREATE, 0755)
 	if err != nil {
 		log.Fatal(err)

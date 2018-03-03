@@ -2,7 +2,7 @@ package gedb
 
 import (
 	"database/sql"
-	sqldriver "database/sql/driver"
+	"database/sql/driver"
 	"os"
 	"path/filepath"
 	"testing"
@@ -11,7 +11,7 @@ import (
 )
 
 func TestImplementsDriver(t *testing.T) {
-	var _ sqldriver.Driver = &gedbDriver{}
+	var _ driver.Driver = &gedbDriver{}
 }
 
 func TestOpenDatabase(t *testing.T) {

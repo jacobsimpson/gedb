@@ -1,7 +1,7 @@
 package gedb
 
 import (
-	sqldriver "database/sql/driver"
+	"database/sql/driver"
 	"fmt"
 
 	"github.com/jacobsimpson/gedb/parser"
@@ -36,7 +36,7 @@ func (stmt *gedbStmt) NumInput() int {
 // as an INSERT or UPDATE.
 //
 // Deprecated: Drivers should implement StmtExecContext instead (or additionally).
-func (stmt *gedbStmt) Exec(args []sqldriver.Value) (sqldriver.Result, error) {
+func (stmt *gedbStmt) Exec(args []driver.Value) (driver.Result, error) {
 	return nil, fmt.Errorf("unimplemented - could not 'Exec'")
 }
 
@@ -44,7 +44,7 @@ func (stmt *gedbStmt) Exec(args []sqldriver.Value) (sqldriver.Result, error) {
 // SELECT.
 //
 // Deprecated: Drivers should implement StmtQueryContext instead (or additionally).
-func (stmt *gedbStmt) Query(args []sqldriver.Value) (sqldriver.Rows, error) {
+func (stmt *gedbStmt) Query(args []driver.Value) (driver.Rows, error) {
 	fmt.Printf("the query to execute is : %+v\n", stmt.ast)
 	return nil, fmt.Errorf("unimplemented - could not 'Query'")
 }

@@ -1,7 +1,7 @@
 package gedb
 
 import (
-	sqldriver "database/sql/driver"
+	"database/sql/driver"
 	"strings"
 	"testing"
 
@@ -9,7 +9,7 @@ import (
 )
 
 func TestImplementsInterface(*testing.T) {
-	var _ sqldriver.Driver = &gedbDriver{}
+	var _ driver.Driver = &gedbDriver{}
 	// Just compiling is enough to pass this test.
 }
 
