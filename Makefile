@@ -3,9 +3,9 @@
 # compile. I checked the doc page and it says there is no knobs to suppress
 # warnings. False alarms make it valueless.
 build::
+	goimports -w `find . -name "*.go"`
 	go test github.com/jacobsimpson/gedb
 	go vet
-	goimports -w `find . -name "*.go"`
 	go build -o gedbcmd ./cmd/gedbcmd
 
 clean::

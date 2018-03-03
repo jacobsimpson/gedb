@@ -3,6 +3,8 @@ package gedb
 import (
 	"database/sql"
 	sqldriver "database/sql/driver"
+	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -15,10 +17,11 @@ func TestImplementsDriver(t *testing.T) {
 func TestOpenDatabase(t *testing.T) {
 	assert := assert.New(t)
 
-	db, err := sql.Open("gedb", "./TestOpenDatabase.gedb")
+	tmpDB := filepath.Join(os.TempDir(), "TestOpenDatabase.gedb")
+	db, err := sql.Open("gedb", tmpDB)
 	assert.NoError(err)
+	defer os.Remove(tmpDB)
 	assert.NotNil(db)
-	//defer os.Remove("./TestOpenDatabase.gedb")
 
 	db.Query("SELECT * FROM users")
 	//assert.NoError(err)
