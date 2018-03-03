@@ -5,6 +5,6 @@ import (
 	"testing"
 )
 
-func TestImplementsRows(t *testing.T) {
+func TestTableScanImplementsRows(t *testing.T) {
 	var _ driver.Rows = &tableScan{}
 }

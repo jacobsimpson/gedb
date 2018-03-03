@@ -48,7 +48,15 @@ func (stmt *gedbStmt) Exec(args []driver.Value) (driver.Result, error) {
 func (stmt *gedbStmt) Query(args []driver.Value) (driver.Rows, error) {
 	fmt.Printf("the query to execute is : %+v\n", stmt.ast)
 	if s, ok := stmt.ast.(*parser.SelectStatement); ok {
-		return rows.NewTableScan(s.From.Name), nil
+		return rows.NewFilter(
+			rows.NewTableScan(s.From.Name),
+			[]rows.Criteria{
+				&rows.FieldEqualsValue{
+					FieldName: "table_name",
+					Value:     "users",
+				},
+			},
+		), nil
 	}
 	return nil, fmt.Errorf("gedbStmt.Query -- not implemented")
 }
