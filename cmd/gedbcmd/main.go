@@ -68,7 +68,22 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Unable to execute query: %v\n")
 		os.Exit(1)
 	}
+	columns, err := rows.Columns()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to list the columns for the result set: %v\n", err)
+		os.Exit(1)
+	}
+	for _, c := range columns {
+		fmt.Printf("%s\n", c)
+	}
 	for rows.Next() {
-		fmt.Printf("%v\n", rows.Scan())
+		var id int
+		var name string
+		err := rows.Scan(&id, &name)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Unable to get data: %v\n", err)
+			os.Exit(1)
+		}
+		fmt.Printf("Row = %d, %q\n", id, name)
 	}
 }

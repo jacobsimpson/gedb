@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jacobsimpson/gedb/parser"
+	"github.com/jacobsimpson/gedb/rows"
 )
 
 type gedbStmt struct {
@@ -46,5 +47,8 @@ func (stmt *gedbStmt) Exec(args []driver.Value) (driver.Result, error) {
 // Deprecated: Drivers should implement StmtQueryContext instead (or additionally).
 func (stmt *gedbStmt) Query(args []driver.Value) (driver.Rows, error) {
 	fmt.Printf("the query to execute is : %+v\n", stmt.ast)
-	return nil, fmt.Errorf("unimplemented - could not 'Query'")
+	if s, ok := stmt.ast.(*parser.SelectStatement); ok {
+		return rows.NewTableScan(s.From.Name), nil
+	}
+	return nil, fmt.Errorf("gedbStmt.Query -- not implemented")
 }
