@@ -9,10 +9,10 @@ import (
 type PageSize int
 
 const (
-	TwoKiloBytes     = 2096
-	FourKiloBytes    = 4096
-	EightKiloBytes   = 8192
-	SixteenKiloBytes = 16384
+	TwoKiloBytes     PageSize = 2096
+	FourKiloBytes             = 4096
+	EightKiloBytes            = 8192
+	SixteenKiloBytes          = 16384
 )
 
 type PageReaderWriter interface {
@@ -22,8 +22,8 @@ type PageReaderWriter interface {
 }
 
 type RecordReaderWriter interface {
-	ReadRecord(RecordSchema, Record) error
-	WriteRecord(RecordSchema, Record) error
+	//	ReadRecord(RecordSchema, Record) error
+	//	WriteRecord(RecordSchema, Record) error
 }
 
 type pageReaderWriter struct {
@@ -37,7 +37,7 @@ type recordReaderWriter struct {
 
 func NewPageReaderWriter(size PageSize) PageReaderWriter {
 	return &pageReaderWriter{
-		buffer: make([]byte, int.(size)),
+	//buffer: make([]byte, int.(size)),
 	}
 }
 
@@ -54,19 +54,19 @@ func (prw *pageReaderWriter) Read(p []byte) (n int, err error) {
 }
 
 func (prw *pageReaderWriter) GetRecordReaderWriter() RecordReaderWriter {
-	return *recordReaderWriter{
-		pageReaderWriter: prw,
+	return &recordReaderWriter{
+	//pageReaderWriter: prw,
 	}
 }
 
-func (rrw *recordReaderWriter) WriteRecord(r Record) error {
-	rrw.pageReaderWriter.lock.Lock()
-	defer rrw.pageReaderWriter.lock.Unlock()
-	return fmt.Errorf("not implemented")
-}
+//func (rrw *recordReaderWriter) WriteRecord(r Record) error {
+//	rrw.pageReaderWriter.lock.Lock()
+//	defer rrw.pageReaderWriter.lock.Unlock()
+//	return fmt.Errorf("not implemented")
+//}
 
-func (rrw *recordReaderWriter) ReadRecord() (Record, error) {
-	rrw.pageReaderWriter.lock.RLock()
-	defer rrw.pageReaderWriter.lock.RUnlock()
-	return nil, fmt.Errorf("not implemented")
-}
+//func (rrw *recordReaderWriter) ReadRecord() (Record, error) {
+//	rrw.pageReaderWriter.lock.RLock()
+//	defer rrw.pageReaderWriter.lock.RUnlock()
+//	return nil, fmt.Errorf("not implemented")
+//}

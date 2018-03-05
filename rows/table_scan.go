@@ -3,33 +3,19 @@ package rows
 import (
 	"database/sql/driver"
 	"fmt"
-	"io"
+
+	"github.com/jacobsimpson/gedb/storage"
 )
 
-var static = []struct {
-	id   int
-	name string
-}{
-	{
-		id:   1,
-		name: "objects",
-	},
-	{
-		id:   2,
-		name: "users",
-	},
-}
-
-func NewTableScan(tableName string) driver.Rows {
+func NewTableScan(store storage.Store, tableId storage.TableId) driver.Rows {
+	scanner := store.Scan(tableId)
 	return &tableScan{
-		tableName: tableName,
-		nextRow:   0,
+		scanner: scanner,
 	}
 }
 
 type tableScan struct {
-	tableName string
-	nextRow   int
+	scanner storage.TableScanner
 }
 
 // Columns returns the names of the columns. The number of
@@ -54,12 +40,12 @@ func (r *tableScan) Close() error {
 //
 // Next should return io.EOF when there are no more rows.
 func (r *tableScan) Next(dest []driver.Value) error {
-	if r.nextRow >= len(static) {
-		// Return io.EOF indicates there are no more rows.
-		return io.EOF
+	if err := r.scanner.Scan(); err != nil {
+		return err
 	}
-	dest[0] = static[r.nextRow].id
-	dest[1] = static[r.nextRow].name
-	r.nextRow++
+	row := r.scanner.Row()
+	for i, v := range row.Data() {
+		dest[i] = v
+	}
 	return nil
 }

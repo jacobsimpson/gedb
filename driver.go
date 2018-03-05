@@ -9,6 +9,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/jacobsimpson/gedb/storage"
 )
 
 func init() {
@@ -51,7 +53,7 @@ func (db *gedbDriver) Open(name string) (driver.Conn, error) {
 		return nil, fmt.Errorf("unable to open database %q: %v", name, err)
 	}
 
-	return &gedbConn{}, nil
+	return &gedbConn{store: storage.NewFileStore(name)}, nil
 }
 
 func (db *gedbDriver) readHeader(reader io.Reader) (*header, error) {

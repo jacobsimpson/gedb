@@ -5,9 +5,12 @@ import (
 	"fmt"
 
 	"github.com/jacobsimpson/gedb/parser"
+	"github.com/jacobsimpson/gedb/storage"
 )
 
-type gedbConn struct{}
+type gedbConn struct {
+	store storage.Store
+}
 
 // Prepare returns a prepared statement, bound to this connection.
 func (conn *gedbConn) Prepare(query string) (driver.Stmt, error) {
@@ -15,7 +18,7 @@ func (conn *gedbConn) Prepare(query string) (driver.Stmt, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &gedbStmt{ast: ast}, nil
+	return &gedbStmt{store: conn.store, ast: ast}, nil
 }
 
 // Close invalidates and potentially stops any current

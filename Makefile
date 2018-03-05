@@ -7,7 +7,8 @@ build::
 	go test \
 		github.com/jacobsimpson/gedb \
 		github.com/jacobsimpson/gedb/parser \
-		github.com/jacobsimpson/gedb/rows
+		github.com/jacobsimpson/gedb/rows \
+		github.com/jacobsimpson/gedb/storage
 	go vet
 	go build -o gedbcmd ./cmd/gedbcmd
 

@@ -7,5 +7,7 @@
 *   Implement inserts.
 *   Implement updates.
 *   Implement deletes.
+*   Implement transactions.
+*   Implement clustered indexes.
 *   Query optimizer.
 

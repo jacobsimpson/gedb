@@ -6,10 +6,12 @@ import (
 
 	"github.com/jacobsimpson/gedb/parser"
 	"github.com/jacobsimpson/gedb/rows"
+	"github.com/jacobsimpson/gedb/storage"
 )
 
 type gedbStmt struct {
-	ast parser.AST
+	store storage.Store
+	ast   parser.AST
 }
 
 // Close closes the statement.
@@ -47,9 +49,9 @@ func (stmt *gedbStmt) Exec(args []driver.Value) (driver.Result, error) {
 // Deprecated: Drivers should implement StmtQueryContext instead (or additionally).
 func (stmt *gedbStmt) Query(args []driver.Value) (driver.Rows, error) {
 	fmt.Printf("the query to execute is : %+v\n", stmt.ast)
-	if s, ok := stmt.ast.(*parser.SelectStatement); ok {
+	if _, ok := stmt.ast.(*parser.SelectStatement); ok {
 		return rows.NewFilter(
-			rows.NewTableScan(s.From.Name),
+			rows.NewTableScan(stmt.store, 1),
 			[]rows.Criteria{
 				&rows.FieldEqualsValue{
 					FieldName: "table_name",
