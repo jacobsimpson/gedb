@@ -27,19 +27,19 @@ type fileStore struct{}
 
 func (s *fileStore) Get(rowid RowId) Row { return nil }
 
-func (s *fileStore) Scan(tableId TableId) TableScanner {
-	if tableId == 1 {
-		return &tableScanner{tableId: tableId, nextRow: -1}
+func (s *fileStore) Scan(tableMetadata *TableMetadata) RowScanner {
+	if tableMetadata.TableId == 1 {
+		return &rowScanner{tableMetadata: tableMetadata, nextRow: -1}
 	}
 	return nil
 }
 
-type tableScanner struct {
-	tableId TableId
-	nextRow int
+type rowScanner struct {
+	tableMetadata *TableMetadata
+	nextRow       int
 }
 
-func (t *tableScanner) Scan() error {
+func (t *rowScanner) Scan() error {
 	t.nextRow++
 	if t.nextRow >= len(static) {
 		return io.EOF
@@ -47,7 +47,7 @@ func (t *tableScanner) Scan() error {
 	return nil
 }
 
-func (t *tableScanner) Row() Row {
+func (t *rowScanner) Row() Row {
 	return &row{
 		data: []driver.Value{static[t.nextRow].id, static[t.nextRow].name},
 	}

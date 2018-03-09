@@ -4,10 +4,10 @@ import "database/sql/driver"
 
 type Store interface {
 	Get(rowid RowId) Row
-	Scan(tableid TableId) TableScanner
+	Scan(tableMetadata *TableMetadata) RowScanner
 }
 
-type TableScanner interface {
+type RowScanner interface {
 	// Advances the scanner to the next row. Will return io.EOF if there are no
 	// more rows available.
 	Scan() error

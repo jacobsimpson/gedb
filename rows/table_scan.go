@@ -7,15 +7,15 @@ import (
 	"github.com/jacobsimpson/gedb/storage"
 )
 
-func NewTableScan(store storage.Store, tableId storage.TableId) driver.Rows {
-	scanner := store.Scan(tableId)
+func NewTableScan(store storage.Store, tableMetadata *storage.TableMetadata) driver.Rows {
+	scanner := store.Scan(tableMetadata)
 	return &tableScan{
 		scanner: scanner,
 	}
 }
 
 type tableScan struct {
-	scanner storage.TableScanner
+	scanner storage.RowScanner
 }
 
 // Columns returns the names of the columns. The number of

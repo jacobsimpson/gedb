@@ -51,7 +51,11 @@ func (stmt *gedbStmt) Query(args []driver.Value) (driver.Rows, error) {
 	fmt.Printf("the query to execute is : %+v\n", stmt.ast)
 	if _, ok := stmt.ast.(*parser.SelectStatement); ok {
 		return rows.NewFilter(
-			rows.NewTableScan(stmt.store, 1),
+			rows.NewTableScan(stmt.store, &storage.TableMetadata{
+				TableId:   1,
+				TableName: "objects",
+				FirstPage: 1,
+			}),
 			[]rows.Criteria{
 				&rows.FieldEqualsValue{
 					FieldName: "table_name",

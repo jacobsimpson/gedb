@@ -20,7 +20,11 @@ func TestFileStoreScan(t *testing.T) {
 	s := storage.NewFileStore("name")
 	assert.NotNil(s)
 
-	ts := s.Scan(1)
+	ts := s.Scan(&storage.TableMetadata{
+		TableId:   1,
+		TableName: "objects",
+		FirstPage: 1,
+	})
 	assert.NotNil(ts)
 
 	ts.Scan()
